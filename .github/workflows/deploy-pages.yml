@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect package manager
+        id: detect-pkg
+        run: |
+          if [ -f "package-lock.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+          elif [ -f "yarn.lock" ]; then
+            echo "manager=yarn" >> $GITHUB_OUTPUT
+          elif [ -f "pnpm-lock.yaml" ]; then
+            echo "manager=pnpm" >> $GITHUB_OUTPUT
+          else
+            echo "manager=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        if: steps.detect-pkg.outputs.manager != 'none'
+        run: |
+          if [ "${{ steps.detect-pkg.outputs.manager }}" = "npm" ]; then
+            npm ci
+          elif [ "${{ steps.detect-pkg.outputs.manager }}" = "yarn" ]; then
+            yarn install --frozen-lockfile
+          elif [ "${{ steps.detect-pkg.outputs.manager }}" = "pnpm" ]; then
+            pnpm install --frozen-lockfile
+          fi
+
+      - name: Build project
+        run: |
+          if [ -f "package.json" ]; then
+            if grep -q '"build"' package.json; then
+              if [ "${{ steps.detect-pkg.outputs.manager }}" = "npm" ]; then
+                npm run build
+              elif [ "${{ steps.detect-pkg.outputs.manager }}" = "yarn" ]; then
+                yarn build
+              elif [ "${{ steps.detect-pkg.outputs.manager }}" = "pnpm" ]; then
+                pnpm build
+              fi
+            fi
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
