@@ -1,0 +1,115 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env.*
+*.venv
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+pip-wheel-metadata/
+*.log
+
+# Bash
+*.sh~
+*.bash_history
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Docker
+*.tar
+*.img
+*.container
+Dockerfile.*
+docker-compose.*
+.dockerignore
+
+# Nginx
+nginx.conf
+*.pid
+logs/
+*.log
+
+# AWS CLI
+.aws/
+*.pem
+*.key
+
+# Prometheus
+prometheus.yml
+data/
+*.db
+
+# Grafana
+grafana.db
+grafana.ini
+plugins/
+sessions/
+logs/
+*.log
+
+# Langraph (if any cache or build artifacts)
+langraph_cache/
+langraph_build/
+
+# General
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sqlite3
+*.db
+node_modules/
+*.crt
+*.csr
+*.srl
+*.pub
+*.lock
+*.gz
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.out
+*.pid
+*.pid.*
+*.sock
+*.coverage
+.coverage.*
+.cache/
+.cache
+__pypackages__/
+.mypy_cache/
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+*.mo
+*.pot
+*.po
