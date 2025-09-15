@@ -13,46 +13,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Detect package manager
-        id: detect-pkg
-        run: |
-          if [ -f "package-lock.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-          elif [ -f "yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-          elif [ -f "pnpm-lock.yaml" ]; then
-            echo "manager=pnpm" >> $GITHUB_OUTPUT
-          else
-            echo "manager=none" >> $GITHUB_OUTPUT
-          fi
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
       - name: Install dependencies
-        if: steps.detect-pkg.outputs.manager != 'none'
         run: |
-          if [ "${{ steps.detect-pkg.outputs.manager }}" = "npm" ]; then
-            npm ci
-          elif [ "${{ steps.detect-pkg.outputs.manager }}" = "yarn" ]; then
-            yarn install --frozen-lockfile
-          elif [ "${{ steps.detect-pkg.outputs.manager }}" = "pnpm" ]; then
-            pnpm install --frozen-lockfile
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
           fi
 
-      - name: Build project
+      - name: Build static content
         run: |
-          if [ -f "package.json" ]; then
-            if grep -q '"build"' package.json; then
-              if [ "${{ steps.detect-pkg.outputs.manager }}" = "npm" ]; then
-                npm run build
-              elif [ "${{ steps.detect-pkg.outputs.manager }}" = "yarn" ]; then
-                yarn build
-              elif [ "${{ steps.detect-pkg.outputs.manager }}" = "pnpm" ]; then
-                pnpm build
-              fi
-            fi
-          fi
+          # Replace this with your actual build command if needed
+          # For example, if you generate HTML from Python, do it here
+          # If your static files are already present, you can skip this step
+          echo "No build step defined. Add your build commands here if needed."
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./static
+          # Change ./static to your actual static content directory if different
